@@ -1,0 +1,32 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root">
+        </div>
+        <script src="./js/react.development.js"> </script> 
+        <script src="./js/react-dom.development.js"> </script>
+        <script src="./js/babel.js"> </script>
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root')
+            function Parent(props){
+                const names = ['mahi','nikhil','suri','kaddi','sri']
+                return (
+                    <div> 
+                    <h1> Parent Component </h1>
+                    {
+                        names.map(name=>{
+                            return <Child name={name} />
+                        })
+                    }
+                    </div>
+                )
+            }
+            function Child(props) { 
+                return (<h3> Child Component - {props.name} </h3>)
+        } 
+                ReactDOM.render(<Parent/>,rootHandle)
+        </script>
+    </body>
+</html>

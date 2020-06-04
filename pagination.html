@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>UserPost</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+
+      class UserPostTitle extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            posts: "",
+            original: "",
+            number: 10
+          };
+        }
+
+        componentDidMount = () => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "http://jsonplaceholder.typicode.com/posts");
+          xhr.send();
+          xhr.onload = () => {
+            let posts = JSON.parse(xhr.responseText);
+            posts = posts.map((ele) => {
+              return ele.title;
+            });
+            const temp = posts.slice(0, this.state.number);
+            this.setState({ posts: temp, original: posts });
+          };
+        };
+
+        handleClick = () => {
+          const posts = this.state.original.slice(0, this.state.number + 10);
+          this.setState({ number: this.state.number + 10, posts });
+        };
+        
+        render() {
+          return (
+            <div>
+              <ol>
+                {this.state.posts !== "" &&
+                  this.state.posts.map((ele) => {
+                    return <li key={ele}>{ele}</li>;
+                  })}
+              </ol>
+              <button onClick={this.handleClick}>More</button> 
+              <p>
+                Displaying {this.state.number !== 0 && this.state.number} of{" "}
+                {this.state.original !== "" && this.state.original.length}
+              </p>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<UserPostTitle />, rootHandle);
+    </script>
+  </body>
+</html>

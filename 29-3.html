@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class UserInfo extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            user: "",
+            name: "",
+            num_posts: 0
+          };
+        }
+
+        componentDidMount() {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "http://jsonplaceholder.typicode.com/posts");
+          xhr.send();
+          xhr.onload = () => {
+            let data = JSON.parse(xhr.responseText);
+
+            data = data.map((ele) => {
+              return ele.userId;
+            });
+
+            const user = [...new Set(data)];
+            this.setState({ user });
+          };
+        }
+
+        handleClick = (ele) => {
+          console.log(ele);
+          const xhr2 = new XMLHttpRequest();
+          xhr2.open(
+            "GET",
+            `http://jsonplaceholder.typicode.com/posts?userId=${ele}`
+          );
+          xhr2.send();
+          xhr2.onload = () => {
+            const user = JSON.parse(xhr2.responseText);
+            window.alert(`User${ele} has written ${user.length} posts`);
+          };    
+        };
+
+        render() {
+          return (
+            <div>
+              <ul>
+                {this.state.user != ""
+                  ? this.state.user.map((ele) => {
+                      return (
+                        <li key={ele}>
+                          User{ele}
+                          <input
+                            type="button"
+                            value="info"
+                            onClick={() => this.handleClick(ele)}
+                          />
+                        </li>
+                      );
+                    })
+                  : ""}
+              </ul>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<UserInfo />, rootHandle);
+    </script>
+  </body>
+</html>

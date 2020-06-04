@@ -1,0 +1,70 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root">
+        </div> 
+        <script src="./js/react.development.js"> </script> 
+
+        <script src="./js/react-dom.development.js"> </script>
+
+        <script src="./js/babel.js"> </script>
+
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root') 
+            class Todos extends React.Component {
+                constructor(){
+                    super()
+                    this.state = {
+                        users : [],
+                        todos : []
+                    }
+                }
+
+                componentDidMount(){ 
+                    function userApi(){
+                        return new Promise((resolve,reject) => {
+                        const xhr = new XMLHttpRequest()
+                        xhr.open('GET','https://jsonplaceholder.typicode.com/users')
+                        xhr.send()
+                        xhr.onload = () => {
+                            resolve(JSON.parse(xhr.responseText))
+                        }
+                    })
+                    }
+
+                    function todosApi(){
+                        return new Promise((resolve,reject)=>{
+                            const xhr = new XMLHttpRequest()
+                            xhr.open('GET','https://jsonplaceholder.typicode.com/todos')
+                            xhr.send()
+                            xhr.onload = () => {
+                                resolve(JSON.parse(xhr.responseText))
+                            }
+                        })
+                    }
+
+                Promise.all([userApi(), todosApi()])
+                    .then((values)=>{
+                    const [users,todos] = values 
+                    this.setState({users, todos})
+                    })
+                }
+
+                render(){
+                  //console.log(this.state)
+                    return (
+                        <div>
+                        <h2> USERS TODO'S COUNT </h2> 
+                        <ul>  {this.state.users.map(ele=>{
+                            return <li key={ele.id}> {ele.name} - {this.state.todos.filter(todo=>todo.userId==ele.id).length}</li>
+                        })}</ul>
+                        </div>
+                    )
+                }
+            }
+            ReactDOM.render(<Todos/>,rootHandle)
+        </script>
+    </body>
+</html>

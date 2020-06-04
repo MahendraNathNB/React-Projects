@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AutoFind</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class AutoComplete extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            user: "",
+            text: "",
+            fullname: "",
+            email: "",
+            phone: ""
+          };
+        }
+
+        handleChange = (e) => {
+          const text = e.target.value;
+          this.setState({ text });
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "http://jsonplaceholder.typicode.com/users");
+          xhr.send();
+          xhr.onload = () => {
+            const userData = JSON.parse(xhr.responseText);
+
+            const user = userData.filter((ele) => {
+              return ele.username.toLowerCase().includes(this.state.text);
+            });
+            if (this.state.text == "") {
+              this.setState({
+                user: "",
+                fullname: "",
+                email: "",
+                phone: ""
+              });
+            } else {
+              this.setState({
+                user,
+                fullname: user[0].name,
+                email: user[0].email,
+                phone: user[0].phone
+              });
+            }
+          };
+        };
+
+        render() {
+          return (
+            <div align="center">
+              <label>UserName</label>
+              <input type="text" onChange={this.handleChange} />
+              <br />
+              <br />
+              <label>Full Name</label>
+              <input type="text" value={this.state.fullname} />
+              <br />
+              <br />
+              <label>Email ID</label>
+              <input type="text" value={this.state.email} />
+              <br />
+              <br />
+              <label>Phone</label>
+              <input type="text" value={this.state.phone} />
+
+              {this.state.user != "" ? (
+                this.state.user.map(function(ele) {
+                  return (
+                    <ul key={ele.id}>
+                      <li>Username:{ele.username}</li>
+                      <li>Name:{ele.name}</li>
+                      <li>Email:{ele.email}</li>
+                      <li>Phone Number:{ele.phone}</li>
+                    </ul>
+                  );
+                })
+              ) : (
+                <p>Type user name to AutoFill</p>
+              )}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<AutoComplete />, rootHandle);
+    </script>
+  </body>
+</html>

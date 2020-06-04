@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Form Method one using class and function Component</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class Show extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            username: ""
+          };
+        }
+
+        handleNameChange = (e) => {
+          const username = e.target.value;
+          this.setState({ username });
+        };
+
+        handleSubmit = (e) => {
+          e.preventDefault();
+          this.props.handleSubmitName(this.state.username);
+        };
+
+        render() {
+          return (
+            <div>
+              <form onSubmit={this.handleSubmit}>
+                <input
+                  type="text"
+                  onChange={this.handleNameChange}
+                  value={this.state.username}
+                />
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
+          );
+        }
+      }
+
+      class Display extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            name: ""
+          };
+        }
+
+        handleSubmitName = (name) => {
+          this.setState({ name });
+        };
+
+        render() {
+          return (
+            <div>
+              <h1>{this.state.name}</h1>
+              <Show handleSubmitName={this.handleSubmitName} />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Display />, rootHandle);
+    </script>
+  </body>
+</html> 

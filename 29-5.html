@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Child to Parent method 2</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root")
+      class Child extends React.Component {
+        constructor() {
+          super()
+        }
+        render() {
+          return (
+            <div>
+              <div>I am Child</div>
+              <input type="text"
+                placeholder="Write text"
+                onChange={(e) => updateText2(e.target.value)}
+              />
+            </div>
+          );
+        }
+      }
+
+      function updateText2(text) {
+        this.setState({ text })
+      }
+
+      class Parent extends React.Component {
+        constructor() {
+          super()
+          this.state = {
+            text: "Initial Text"
+          }
+          updateText2 = updateText2.bind(this)
+        }
+        updateText1 = (text) => {
+          this.setState({ text })
+        }
+
+        render() {
+          return (
+            <div>
+              <div>I am Parent</div>
+              <div>{this.state.text}</div>
+              <Child />
+            </div>
+          )
+        }
+      }
+
+    ReactDOM.render(<Parent/>, rootHandle)
+    </script>
+  </body>
+</html> 

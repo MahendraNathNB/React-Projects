@@ -1,0 +1,30 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root">
+        
+        <script src="./js/react.development.js"> </script> 
+
+        <script src="./js/react-dom.development.js"> </script>
+
+        <script src="./js/babel.js"> </script>
+
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root')
+          
+          let num =[10,15,20] 
+
+          function Filter(arr) {
+                return  (
+                    <ul>  {arr.name.map(function(ele){
+                        return <li>{ele} - {ele%2==0? "even":"odd"} </li>
+                    })} </ul>
+                )
+          }
+        
+            ReactDOM.render(<Filter name={num}/>,rootHandle) 
+        </script>
+    </body>
+</html> 

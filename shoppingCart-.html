@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+    <!-- https://unpkg.com/react@16.12.0/umd/react.development.js -->
+    <script src="./js/react.development.js"></script>
+    <!-- https://www.unpkg.com/react-dom@16.12.0/umd/react-dom.development.js -->
+    <script src="./js/react-dom.development.js"></script>
+
+    <!-- https://unpkg.com/babel-standalone@6.26.0/babel.js -->
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+        const rootHandle = document.getElementById('root')
+        function ShoppingCart(props){ 
+             const lineItems = [
+                { id: 1, productName: 'The Kill List', productPrice: 150, quantity: 2 },
+                { id: 2, productName: 'The Negotiator', productPrice: 250, quantity: 7 },
+                { id: 2, productName: 'The Radiator', productPrice: 50, quantity: 9 }
+            ]
+            let total = 0 
+            lineItems.forEach(item => total += item.productPrice * item.quantity)
+            console.log(total)
+            return (
+                <div>
+                    <h2> Shopping Cart </h2> 
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th> # </th> 
+                                <th> name </th> 
+                                <th> price </th> 
+                                <th> quantity</th> 
+                                <th> total </th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { 
+                                lineItems.map(lineItem => {
+                                    return <LineItem 
+                                                key={lineItem.id}
+                                                id={lineItem.id}
+                                                name={lineItem.productName}
+                                                price={lineItem.productPrice}
+                                                quantity={lineItem.quantity}
+                                            />
+                                })
+                            }
+                        </tbody>
+                    </table> 
+
+                    <h2>Sub Total - { total }</h2>
+
+                    <SideBar totalPrice={total} totalQuantity={lineItems.length}/>
+                </div> 
+            )
+        }
+
+        function LineItem(props) {
+            return (
+                <tr>
+                    <td> {props.id} </td>
+                    <td> {props.name} </td>
+                    <td> {props.price} </td>
+                    <td> {props.quantity} </td>
+                    <td> {props.price * props.quantity} </td>
+                </tr> 
+            )
+        }       
+
+        function SideBar(props) {
+            return (
+                <div>
+                    <h3> Sub Total - ({props.totalQuantity}) - { props.totalPrice} </h3> 
+                </div> 
+            )
+        }
+
+        ReactDOM.render(<ShoppingCart />, rootHandle)
+    </script>
+</body>
+</html>
+
+

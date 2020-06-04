@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Filter</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root")
+      class AutoComplete extends React.Component {
+        constructor() {
+          super()
+          this.state = {
+            user: [{ id: 1, name: "mah" }],
+            origin: "",
+            text: ""
+          }
+        }
+
+        componentDidMount() {
+          const xhr = new XMLHttpRequest()
+          xhr.open("GET", "http://jsonplaceholder.typicode.com/users")
+          xhr.send();
+          xhr.onload = () => {
+            const userData = JSON.parse(xhr.responseText)
+            this.setState({ user: userData, origin: userData })
+          }
+        }
+
+        handleChange = (e) => {
+          const text = e.target.value
+          this.setState({ text })
+
+          const user = this.state.user.filter((ele) => {
+            return ele.name.toLowerCase().includes(this.state.text)
+          });
+
+          e.target.value == ""
+            ? this.setState({
+                user: this.state.origin
+              })
+            : this.setState({
+                user: user
+              })
+        }
+
+        render() {
+          return (
+            <div align="center">
+              <label>UserName</label>
+              <input type="text" onChange={this.handleChange} />
+
+              {this.state.user.map((ele) => {
+                return (
+                  <ul key={ele.id}>
+                    <li>Name:{ele.name}</li>
+                    <li>Username:{ele.username}</li>
+                    <li>Email:{ele.email}</li>
+                    <li>Phone Number:{ele.phone}</li>
+                  </ul>
+                );
+              })}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<AutoComplete />, rootHandle)
+    </script>
+  </body>
+</html>

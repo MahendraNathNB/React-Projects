@@ -1,0 +1,72 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>hello</title>
+    </head>
+    <body>
+        <div id="root">
+
+        </div>
+        <!--https://unpkg.com/react@16.12.0/umd/react.development.js-->
+        <script src="js/react.development.js"></script>
+        <!--https://www.unpkg.com/react-dom@16.12.0/umd/react-dom.development.js-->
+        <script src="js/react-dom.development.js"></script>
+        <!--https://unpkg.com/babel-standalone@6.26.0/babel.js-->
+        <script src="js/babel.js"></script>
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root');
+
+            class RandomUSers extends React.Component {
+                constructor(){
+                    super()
+                    this.state = {
+                        users : [{id:1,name:'mohan'},
+                                 {id:2,name:'naveen'},
+                                 {id:3,name:'mahendra'},
+                                 {id:4,name:'suhas'}
+                        ],
+                        userName:''
+
+                    }
+                }
+
+                handleButton = () => {
+                    let random = Math.round(Math.random()*this.state.users.length)
+                    console.log(random)
+
+                    let userName = this.state.users[random].name
+                    this.state.users.splice(random,1)
+                    
+                    console.log(userName)
+                    this.setState(()=>{
+                        return{
+                            users:this.state.users,
+                            userName:userName
+                        }
+                    })
+                }
+
+
+                render(){
+                    return(
+                        <div>
+                            {this.state.userName.length == 0 ? <h2>----</h2> : <h2>{this.state.userName}</h2>}
+                            <ul>
+                                {
+                                    this.state.users.map((ele)=>{
+                                        return <li key={ele.id}>{ele.name}</li>
+                                    })
+                                }
+                            </ul>
+                            <input type="button" onClick={this.handleButton} value="Draw"/>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<RandomUSers/>,rootHandle)
+          
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root"> </div> 
+        <script src="./js/react.development.js"> </script> 
+
+        <script src="./js/react-dom.development.js"> </script>
+
+        <script src="./js/babel.js"> </script>
+
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root') 
+       class Counter extends React.Component {
+           constructor() {
+               console.log ('constructor')
+               super() // call constructor in parent class
+               this.state = {
+                    count:1,
+                    text:'counter'
+               }
+           }
+           handleClick =()=> {
+               this.setState(prevState=>({
+                     count: prevState.count + 1
+               })
+            )
+           }
+           negativeClick =()=> {
+            this.setState(prevState=>({
+                     count: prevState.count - 1
+               })
+            )
+        }
+
+           render() {
+               return(
+               <div>
+                <h1> {this.state.text} {this.state.count} </h1>
+                <button onClick= {this.handleClick}> up</button> 
+                <button onClick= {this.negativeClick}>down</button>     
+            </div>
+               )
+           }
+
+       }
+
+       const ele = (
+           <div> 
+            <Counter/>
+            <Counter/>
+            <Counter/>
+            <Counter/>
+            <Counter/>
+            </div>
+       )
+        ReactDOM.render(ele,rootHandle)
+        </script>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Currency Converter</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class Converter extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            construpee: 0,
+            rupee: 0,
+            dollar: 1
+          };
+        }
+
+        componentDidMount() {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", `https://api.exchangeratesapi.io/latest?base=USD`);
+          xhr.send();
+          xhr.onload = () => {
+            const currency = JSON.parse(xhr.responseText);
+            this.setState({ construpee: currency.rates.INR });
+          };
+        }
+
+        handleChange = (e) => {
+          const dollar = e.target.value;
+          const rupee = e.target.value * this.state.construpee;
+          this.setState({ dollar, rupee });
+        };
+
+        render() {
+          return (
+            <div align="center">
+              <h1>Currency Converter</h1>
+              <h2>
+                Indian rupee(₹):
+                {this.state.rupee == 0
+                  ? this.state.construpee.toFixed(2)
+                  : this.state.rupee.toFixed(2)}
+              </h2>
+              <h2>US Dollar ($):{this.state.dollar}</h2>
+              <input
+                type="range"
+                min="1"
+                max="700"
+                id="slide"
+                onChange={this.handleChange}
+              />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<Converter />, rootHandle);
+    </script>
+  </body>
+</html>

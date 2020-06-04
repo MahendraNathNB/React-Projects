@@ -1,0 +1,134 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root">
+        </div> 
+        <script src="./js/react.development.js"> </script> 
+
+        <script src="./js/react-dom.development.js"> </script>
+
+        <script src="./js/babel.js"> </script>
+
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root') 
+        class Hotel extends React.Component{
+            constructor(){
+                super()
+                this.state ={
+                rooms : 0 ,
+                adults : 0 ,
+                children : 0,
+                total : 0,
+                totalCount : 0
+                }
+        }
+        handleRoomClick =()=> { 
+                this.setState((prevState)=>{
+                    return{
+                     rooms: prevState.rooms + 1,
+                     adults: prevState.adults + 1,
+                     total: prevState.total + 4,
+                     totalCount: prevState + 1
+                    }
+               })
+        }
+           negativeRoomClick =()=> {
+               if(this.state.rooms > 0){
+                   if(this.state.totalCount < this.state.total){
+            this.setState((prevState)=>{
+                return{
+                     rooms: prevState.rooms - 1,
+                     adults: prevState.adults - 1,
+                     total: prevState.total - 4,
+                     totalCount: prevState - 1
+                }
+               })
+            }
+        }
+        }
+        handleAdultClick =()=> {
+               this.setState((prevState)=>{
+                   if(this.state.adults< this.state.total){ 
+                       if(this.state.totalCount< this.state.total){
+                       return{
+                     adults: prevState.adults + 1,
+                     totalCount : prevState.totalCount + 1
+                }  
+                } 
+                }
+                }
+            )
+           }
+           negativeAdultClick =()=> {
+            if(this.state.rooms < this.state.adults){
+            this.setState((prevState)=>{
+                return{
+                     adults: prevState.adults - 1,
+                     totalCount : prevState.totalCount - 1
+                }
+                })
+               }
+        }
+        handleChildrenClick =()=> {
+            if(this.state.totalCount < this.state.total){
+                    this.setState((prevState)=>{
+                        return {
+                            children : prevState.children + 1,
+                            totalCount : prevState.totalCount + 1
+                        }
+                    })
+                    }
+                }
+           negativeChildrenClick =()=> {
+            if(this.state.children > 0){
+                        this.setState((prevState)=>{
+                        return {
+                            children : prevState.children - 1,
+                            totalCount : prevState.totalCount - 1
+                        }
+                    })
+                    }
+                }
+
+        render (){
+            return (
+            <div align='center'> 
+                <h2> HOTEL FRIENDS</h2>
+                <ul> 
+              <h3> Rooms<button  onClick={this.negativeRoomClick}> - </button> {this.state.rooms} <button  onClick= {this.handleRoomClick}> + </button> </h3>
+
+              <Adult adult={this.state.adults} handleAdultClick={this.handleAdultClick} negativeAdultClick={this.negativeAdultClick}/> 
+              <Children children={this.state.children} handleChildrenClick={this.handleChildrenClick} negativeChildrenClick={this.negativeChildrenClick} />
+                </ul>
+            </div>
+            )
+        }
+    }
+            function Adult(props){
+                return(
+                        <tr>
+                          <td> Adults </td>
+                          <td><button onClick={props.negativeAdultClick} > - </button></td>
+                          <td><h2>{props.adult} </h2></td>
+                          <td><button  onClick={props.handleAdultClick} > + </button></td>
+                        </tr>
+                )
+            }
+
+            function Children(props){
+                return(
+                        <tr>
+                          <td> Children</td>
+                          <td><button  onClick={props.negativeChildrenClick} > - </button></td>
+                          <td><h2>{props.children} </h2></td>
+                          <td><button  onClick={props.handleChildrenClick} > + </button></td>
+                        </tr>
+                )
+            }
+
+            ReactDOM.render(<Hotel/>,rootHandle)
+        </script>
+    </body> 
+</html> 

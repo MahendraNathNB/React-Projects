@@ -1,0 +1,107 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+    </head>
+    <body>
+        <div id= "root">
+        </div> 
+        <script src="./js/react.development.js"> </script> 
+
+        <script src="./js/react-dom.development.js"> </script>
+
+        <script src="./js/babel.js"> </script>
+
+        <script type="text/babel"> 
+        const rootHandle = document.getElementById('root') 
+            class Tasklist extends React.Component {
+                constructor(){
+                    super()
+                    this.state ={
+                        tasks: [
+                            { id :1, title:'server Deploy', completed: false},
+                            { id :2, title:'DB backup', completed: true},
+                            { id :3, title:'Admin dashboard', completed: true}
+                        ],
+                        title:'mahi'
+                    }
+                }
+            
+            handleRemove = (selectedTask) => {
+                const confirmRemove = window.confirm(`are you sure you want to remove ${selectedTask.title}?`)
+                if(confirmRemove) {
+                    this.setState((prevState)=> {
+                        return {
+                            tasks: prevState.tasks.filter(task=> task.id != selectedTask.id)
+                        }
+                    })
+                }
+            }
+
+            handleChange =(event) => {
+                let title=event.target.value
+                this.setState ({ title })
+            } 
+
+            handlesubmit=(e) => {
+                e.preventDefault()
+                const task = {
+                    id: Number(new Date()),
+                    title: this.state.title,
+                    completed : false
+                }
+                this.setState((prevState)=>{
+                    return {
+                        tasks: prevState.tasks.concat(task),
+                        title:''
+                    }
+                }) 
+                } 
+                    
+                handleCheckBox=(id) =>{
+                    this.setState((prevState)=>{
+                        return {
+                            tasks: prevState.tasks.map(task=>{
+                                if(task.id == id){
+                                    return Object.assign({}, task,{completed:!task.completed})
+                                }else{
+                                    return Object.assign({},task)
+                                }
+                            })
+                        }
+                    })
+                }
+
+                render()  {
+                    return (
+                        <div> 
+                        <h1> Listing Tasks - {this.state.tasks.length} </h1> 
+                        <ul> 
+                    {this.state.tasks.map((task)=>{
+                        return <li key={task.id} style={{color:task.completed ? 'green':'red'}}>{task.title} 
+                        <input type="checkbox" checked={task.completed} onChange={ ()=>{
+                            this.handleCheckBox(task.id)
+                        }}/>
+                        <button onClick={()=>{
+                            this.handleRemove (task)
+                        }}>
+                        remove 
+                        </button>
+                         </li>
+                    })}
+                        </ul> 
+                            <h2> Add Task </h2> 
+                            <form onSubmit={this.handlesubmit}> 
+                                <label>
+                            <input type="text" placeholder="enter title" value={this.state.title} onChange={this.handleChange} />
+                                <input type="submit" value="submit"/>
+                            </label>
+                                </form>
+                        </div>
+                        )
+                    }
+            }
+                    ReactDOM.render(<Tasklist/>,rootHandle)
+        </script>
+    </body>
+</html>
+
